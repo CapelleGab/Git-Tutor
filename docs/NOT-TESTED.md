@@ -4,18 +4,16 @@ This document lists all the functions in the codebase that currently lack test c
 
 ## Functions Without Tests
 
-| Function                   | File                                | Purpose                                                                   |
-| -------------------------- | ----------------------------------- | ------------------------------------------------------------------------- |
-| `menu()`                   | `src/menu.ts`                       | Displays interactive menu for exercise selection and handles user choices |
-| `setup()`                  | `exercises/basic-commands/setup.ts` | Setup of the first exercise                                               |
-| `choice`                   | `src/constants/choises.ts`          | All menu choices {name, value}                                            |
-| `buildImageIfNeeded()`     | `src/manager/docker.ts`             | Build docker image if needed                                              |
-| `createContainer()`        | `src/manager/docker.ts`             | Create docker container with git-tutor docker image                       |
-| `removeContainer()`        | `src/manager/docker.ts`             | Remove docker container                                                   |
-| `isContainerRunning()`     | `src/manager/docker.ts`             | Check if the container is running                                         |
-| `execInContainer()`        | `src/manager/docker.ts`             | Execute a any command in container                                        |
-| `showAccessInstructions()` | `src/manager/docker.ts`             | Display all instruction for launch container                              |
-| `cleanupAllContainers()`   | `src/manager/docker.ts`             | Clear all exercises container                                             |
+| Function                 | File                                | Purpose                                                                   |
+| ------------------------ | ----------------------------------- | ------------------------------------------------------------------------- |
+| `menu()`                 | `src/menu.ts`                       | Displays interactive menu for exercise selection and handles user choices |
+| `setup()`                | `exercises/basic-commands/setup.ts` | Setup of the first exercise                                               |
+| `choice`                 | `src/constants/choises.ts`          | All menu choices {name, value}                                            |
+| `buildImageIfNeeded()`   | `src/manager/docker.ts`             | Build docker image if needed                                              |
+| `removeContainer()`      | `src/manager/docker.ts`             | Remove docker container                                                   |
+| `isContainerRunning()`   | `src/manager/docker.ts`             | Check if the container is running                                         |
+| `execInContainer()`      | `src/manager/docker.ts`             | Execute a any command in container                                        |
+| `cleanupAllContainers()` | `src/manager/docker.ts`             | Clear all exercises container                                             |
 
 ## Testing Priority
 

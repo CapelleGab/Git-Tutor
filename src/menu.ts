@@ -19,7 +19,10 @@ export async function menu() {
       // TODO: Refactor into a functions to handle the exercise
       break
     case 'exit':
-      break
+      console.log('🧹 Cleaning up any remaining containers...')
+      await DockerManager.cleanupAllContainers()
+      console.log('See you soon! 👋')
+      process.exit(0)
     default:
       break
   }
@@ -47,12 +50,5 @@ export async function menu() {
       await DockerManager.removeContainer(result.containerName)
       console.log('✅ Container cleaned up!')
     }
-  }
-
-  if (answer.exercise === 'exit') {
-    console.log('🧹 Cleaning up any remaining containers...')
-    await DockerManager.cleanupAllContainers()
-    console.log('See you soon! 👋')
-    process.exit(0)
   }
 }

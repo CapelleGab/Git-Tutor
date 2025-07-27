@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { checkPrerequisites } from '../../src/prerequisites.js'
 
-// Mock child_process pour simuler les échecs de commandes
+// Mock execSync
 vi.mock('child_process', () => ({
   execSync: vi.fn(),
 }))

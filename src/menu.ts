@@ -28,7 +28,7 @@ export async function menu() {
   }
   // TODO: Refactor into switch case
   if (answer.exercise === 'basic-commands') {
-    const result = await setup(
+    const containerName = await setup(
       path.join(process.cwd(), 'workspaces/basic-commands')
     )
 
@@ -45,9 +45,9 @@ export async function menu() {
       },
     ])
 
-    if (result?.containerName) {
+    if (containerName) {
       console.log('🧹 Cleaning up Docker container...')
-      await DockerManager.removeContainer(result.containerName)
+      await DockerManager.removeContainer(containerName)
       console.log('✅ Container cleaned up!')
     }
   }

@@ -50,13 +50,7 @@ describe('menu', () => {
       .mockResolvedValueOnce({ exercise: 'basic-commands' })
       .mockResolvedValueOnce({ ready: '' })
 
-    mockSetup.mockResolvedValue({
-      title: 'Test',
-      description: 'Test',
-      objectives: ['Test'],
-      steps: ['Test'],
-      containerName: mockContainerName
-    })
+    mockSetup.mockResolvedValue(mockContainerName)
     mockDockerManager.removeContainer.mockResolvedValue()
 
     await menu()

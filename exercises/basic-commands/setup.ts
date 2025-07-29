@@ -2,20 +2,14 @@ import fs from 'fs-extra'
 import path from 'node:path'
 import { DockerManager } from '../../src/manager/docker.js'
 
-export async function setup(workspacePath: string) {
+export async function setup(exerciseId: string, workspacePath: string) {
   try {
-    // Create the workspace directory
-    console.log(`Setting up workspace... ${workspacePath}`)
-    await fs.ensureDir(workspacePath)
-    // Create the README.md file
-    await fs.writeFile(path.join(workspacePath, 'README.md'), 'Hello, world!')
-    
     // Build Docker image if needed
     console.log('🐳 Preparing Docker environment...')
     await DockerManager.buildImageIfNeeded()
     // Create Docker container for this exercise
     const containerName = await DockerManager.createContainer({
-      exerciseId: 'basic-commands',
+      exerciseId,
       workspacePath: path.resolve(workspacePath),
     })
 

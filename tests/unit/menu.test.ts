@@ -56,6 +56,7 @@ describe('menu', () => {
     await menu()
 
     expect(mockSetup).toHaveBeenCalledWith(
+      'basic-commands',
       expect.stringContaining('workspaces/basic-commands')
     )
     expect(mockDockerManager.removeContainer).toHaveBeenCalledWith(mockContainerName)

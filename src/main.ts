@@ -6,6 +6,7 @@ import { checkPrerequisites } from './prerequisites.js'
 export async function main() {
   console.log('🧠 GitTutor - Checking environment...')
   await checkPrerequisites()
+
   console.log('')
   console.log('.------------------------------------------------------------------------.')
   console.log('|                                                                        |')
@@ -20,6 +21,7 @@ export async function main() {
   console.log('🎓 Welcome to GitTutor CLI ')
   console.log('You are about to learn Git in a fun and interactive way')
   console.log('')
+  
   await menu()
 }
 

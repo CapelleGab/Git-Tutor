@@ -1,23 +1,20 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { DockerManager } from '../../src/manager/docker.js'
 import { execSync } from 'child_process'
+import { Logger } from '../../src/manager/logger.js'
 
-// Mock execSync
+// Mock execSync and Logger
 vi.mock('child_process', () => ({
   execSync: vi.fn()
 }))
+vi.mock('../../src/manager/logger.js')
 
 const mockExecSync = vi.mocked(execSync)
+const mockLogger = vi.mocked(Logger)
 
 describe('docker', () => {
-  let mockConsoleLog: ReturnType<typeof vi.spyOn>
-  let mockExecSync: ReturnType<typeof vi.fn>
-
-  beforeEach(async () => {
+  beforeEach(() => {
     vi.clearAllMocks()
-    mockConsoleLog = vi.spyOn(console, 'log').mockImplementation(() => { })
-    const { execSync } = await import('child_process')
-    mockExecSync = vi.mocked(execSync)
   })
 
   afterEach(() => {
@@ -25,8 +22,10 @@ describe('docker', () => {
   })
 
   it('should create a container successfully', async () => {
+    // Mock execSync calls for removeContainer (stop and rm commands) and docker run
     mockExecSync.mockImplementation((command: string) => {
       if (command.includes('docker stop') || command.includes('docker rm')) {
+        // These might fail if container doesn't exist, which is fine
         return ''
       }
       if (command.includes('docker run')) {
@@ -42,12 +41,14 @@ describe('docker', () => {
 
     expect(containerName).toBe('git-tutor-123')
 
+    // Verify that docker run command was called with correct parameters
     expect(mockExecSync).toHaveBeenCalledWith(
       'docker run -dit --name git-tutor-123 -v /workspaces/test:/workspace git-tutor:latest',
       { stdio: 'inherit' }
     )
 
-    expect(mockConsoleLog).toHaveBeenCalledWith('✅ Container git-tutor-123 created and started')
+    // Verify success message was logged
+    expect(mockLogger.success).toHaveBeenCalledWith('Container git-tutor-123 created and started')
   })
 
   it('should throw error when docker run fails', async () => {
@@ -64,23 +65,4 @@ describe('docker', () => {
       workspacePath: '/workspaces/test',
     })).rejects.toThrow('Failed to create container: Error: Docker run failed')
   })
-
-  it('should display show access instructions when showAccessInstructions is called', () => {
-    const containerName = 'git-tutor-123'
-    DockerManager.showAccessInstructions(containerName)
-
-    expect(mockConsoleLog).toHaveBeenCalledWith('\n📋 Instructions:')
-    expect(mockConsoleLog).toHaveBeenCalledWith(
-      '1. Open a new terminal'
-    )
-    expect(mockConsoleLog).toHaveBeenCalledWith(
-      `2. Access your practice environment:`
-    )
-    expect(mockConsoleLog).toHaveBeenCalledWith(
-      `   docker exec -it ${containerName} bash`
-    )
-    expect(mockConsoleLog).toHaveBeenCalledWith('3. When you\'re done, exit the container with: exit')
-    expect(mockConsoleLog).toHaveBeenCalledWith('4. The container will be automatically cleaned up')
-  })
-
 })

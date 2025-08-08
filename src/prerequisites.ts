@@ -1,7 +1,8 @@
 import { execSync } from 'child_process'
+import { Logger } from './manager/logger.js'
 
 export async function checkPrerequisites() {
-  console.log('')
+  Logger.log('')
   const hasGit = await checkGit()
   const hasDocker = await checkDocker()
 
@@ -11,11 +12,11 @@ export async function checkPrerequisites() {
 async function checkGit() {
   try {
     execSync('git --version', { stdio: 'ignore' })
-    console.log('✅ Git detected')
+    Logger.success('Git detected')
     return true
   } catch {
-    console.log('❌ Git is required !')
-    console.log('📥 Install Git: https://git-scm.com/downloads')
+    Logger.error('Git is required !')
+    Logger.download('Install Git: https://git-scm.com/downloads')
     process.exit(1)
   }
 }
@@ -23,11 +24,11 @@ async function checkGit() {
 async function checkDocker() {
   try {
     execSync('docker --version', { stdio: 'ignore' })
-    console.log('✅ Docker detected')
+    Logger.success('Docker detected')
     return true
   } catch {
-    console.log('❌ Docker is required !')
-    console.log('📥 Install Docker: https://docker.com/get-started')
+    Logger.error('Docker is required !')
+    Logger.download('Install Docker: https://docker.com/get-started')
     process.exit(1)
   }
 }

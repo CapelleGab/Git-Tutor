@@ -1,9 +1,9 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { main } from '../../src/main.js'
-import { menu } from '../../src/menu.js'
 import { checkPrerequisites } from '../../src/prerequisites.js'
+import { menu } from '../../src/menu.js'
+import { Logger } from '../../src/manager/logger.js'
 
-// Mock dependencies
 vi.mock('../../src/prerequisites.js', () => ({
   checkPrerequisites: vi.fn(),
 }))
@@ -12,12 +12,13 @@ vi.mock('../../src/menu.js', () => ({
   menu: vi.fn(),
 }))
 
-describe('Main function', () => {
-  let mockConsoleLog: ReturnType<typeof vi.spyOn>
+vi.mock('../../src/manager/logger.js')
 
+const mockLogger = vi.mocked(Logger)
+
+describe('Main function', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockConsoleLog = vi.spyOn(console, 'log').mockImplementation(() => {})
   })
 
   afterEach(() => {
@@ -79,12 +80,7 @@ describe('Main function', () => {
     mockMenu.mockResolvedValue(undefined)
     await main()
 
-    expect(mockConsoleLog).toHaveBeenCalledWith(
-      '🧠 GitTutor - Checking environment...'
-    )
-    expect(mockConsoleLog).toHaveBeenCalledWith('🎓 Welcome to GitTutor CLI ')
-    expect(mockConsoleLog).toHaveBeenCalledWith(
-      'You are about to learn Git in a fun and interactive way'
-    )
+    expect(mockLogger.brain).toHaveBeenCalledWith('GitTutor - Checking environment...')
+    expect(mockLogger.welcome).toHaveBeenCalled()
   })
 })

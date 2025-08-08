@@ -1,4 +1,5 @@
 import { execSync } from 'child_process'
+import { Logger } from './logger.js'
 
 const DOCKER_IMAGE = 'git-tutor:latest'
 
@@ -11,15 +12,15 @@ export class DockerManager {
   static async buildImageIfNeeded(): Promise<void> {
     try {
       execSync(`docker image inspect ${DOCKER_IMAGE}`, { stdio: 'ignore' })
-      console.log('✅ Docker image git-tutor:latest found')
+      Logger.success(`Docker image ${DOCKER_IMAGE} found`)
     } catch {
-      console.log('🔨 Building Docker image git-tutor:latest...')
+      Logger.build(`Building Docker image ${DOCKER_IMAGE}...`)
       try {
         execSync(`docker build -t ${DOCKER_IMAGE} .`, {
           stdio: 'inherit',
           cwd: process.cwd(),
         })
-        console.log('✅ Docker image built successfully')
+        Logger.success('Docker image built successfully')
       } catch (error) {
         throw new Error(`Failed to build Docker image: ${error}`)
       }
@@ -45,7 +46,7 @@ export class DockerManager {
 
     try {
       execSync(dockerCommand.join(' '), { stdio: 'inherit' })
-      console.log(`✅ Container ${containerName} created and started`)
+      Logger.success(`Container ${containerName} created and started`)
       return containerName
     } catch (error) {
       throw new Error(`Failed to create container: ${error}`)
@@ -88,15 +89,6 @@ export class DockerManager {
     }
   }
 
-  static showAccessInstructions(containerName: string): void {
-    console.log('\n📋 Instructions:')
-    console.log('1. Open a new terminal')
-    console.log(`2. Access your practice environment:`)
-    console.log(`   docker exec -it ${containerName} bash`)
-    console.log(`3. When you're done, exit the container with: exit`)
-    console.log(`4. The container will be automatically cleaned up`)
-  }
-
   static async cleanupAllContainers(): Promise<void> {
     try {
       const containers = execSync('docker ps -a -q -f name=git-tutor-', {
@@ -107,7 +99,7 @@ export class DockerManager {
         execSync(`docker rm -f ${containers.split('\n').join(' ')}`, {
           stdio: 'ignore',
         })
-        console.log('🧹 Cleaned up all git-tutor containers')
+        Logger.cleanup('Cleaned up all git-tutor containers')
       }
     } catch {}
   }

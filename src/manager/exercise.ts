@@ -1,5 +1,4 @@
 import path from 'node:path'
-import { execSync } from 'child_process'
 import fs from 'fs-extra'
 import { DockerManager } from './docker.js'
 import { Logger } from './logger.js'
@@ -41,7 +40,7 @@ export class ExerciseManager {
 
       // Automatically launch Docker container in current terminal
       Logger.loading('Launching Docker container...')
-      this.launchContainer(containerName)
+      DockerManager.launchContainer(containerName)
 
     } catch (error) {
       Logger.error(`Error running exercise: ${error}`)
@@ -80,30 +79,5 @@ export class ExerciseManager {
       Logger.log(`     Commands: ${step.commands.join(', ')}`)
     })
     Logger.log('')
-  }
-
-  private static launchContainer(containerName: string): void {
-    Logger.door(`Opening Docker container: ${containerName}`)
-    Logger.bulb('You are now inside the practice environment!')
-    Logger.log('📝 Follow the steps above to complete the exercise.')
-    Logger.door('Type "exit" when you\'re done to return to the main menu.\n')
-
-    try {
-      // Execute Docker container in the current terminal
-      execSync(`docker exec -it ${containerName} bash`, {
-        stdio: 'inherit',
-        cwd: process.cwd()
-      })
-
-      // When user exits the container, cleanup
-      Logger.cleanup('Cleaning up container...')
-      DockerManager.removeContainer(containerName)
-      Logger.success('Exercise completed! Container cleaned up.')
-
-    } catch (error) {
-      Logger.error(`Error accessing container: ${error}`)
-      // Cleanup on error
-      DockerManager.removeContainer(containerName)
-    }
   }
 }

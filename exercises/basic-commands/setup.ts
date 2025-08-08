@@ -1,6 +1,6 @@
-import fs from 'fs-extra'
 import path from 'node:path'
 import { DockerManager } from '../../src/manager/docker.js'
+import { Logger } from '../../src/manager/logger.js'
 
 export async function setup(exerciseId: string, workspacePath: string) {
   try {
@@ -13,8 +13,7 @@ export async function setup(exerciseId: string, workspacePath: string) {
       workspacePath: path.resolve(workspacePath),
     })
 
-    console.log('✅ Workspace setup complete!')
-    DockerManager.showAccessInstructions(containerName)
+    Logger.success('Workspace setup complete!')
 
     return containerName
   } catch (error) {

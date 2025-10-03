@@ -10,7 +10,7 @@ export async function main() {
 
   Logger.welcome()
 
-  await menu()
+  menu()
 }
 
 main()

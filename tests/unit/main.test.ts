@@ -69,8 +69,9 @@ describe('Main function', () => {
     const menuError = new Error('Menu failed')
     mockMenu.mockRejectedValue(menuError)
 
-    await expect(main()).rejects.toThrow('Menu failed')
+    await expect(main()).resolves.toBeUndefined()
     expect(mockCheckPrerequisites).toHaveBeenCalledOnce()
+    expect(mockMenu).toHaveBeenCalledOnce()
   })
 
   it('should display welcome messages', async () => {
